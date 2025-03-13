@@ -58,33 +58,33 @@ def update_points_register(new_df, old_df, week):
     return df
 
 
-def calculate_rankings(points, old_rank):
+def calculate_rankings(points):
 
     points_halved = 6
     points_removed = 12
 
-    if len(points) > points_halved:
-        points.iloc[:-points_halved] = points.iloc[:-points_halved] / 2
-    if len(points) > points_removed:
-        points = points.iloc[-points_removed:]
+    points_weighted = points.copy()
 
-    points = points.sum().T
+    if len(points) > points_halved:
+        points_weighted.iloc[:-points_halved] = points_weighted.iloc[:-points_halved] / 2
+    if len(points) > points_removed:
+        points_weighted = points_weighted.iloc[-points_removed:]
+
+    sum_points = points_weighted.sum().T
 
     rank = pd.DataFrame(
-        index=points.index,
-        columns=old_rank.columns
+        index=sum_points.index,
+        columns=['points', 'games_played']
     )
 
-    for player in points.index:
-        if player in old_rank['player']:
-            tot_games = old_rank.loc[old_rank['player']==player, 'games_played'] + 1
-        else:
-            tot_games = 1
+    for player in sum_points.index:
+        rank.loc[player, 'points'] = sum_points[player]
+        rank.loc[player, 'games_played'] = (points[player] > 0).sum()
 
-        rank.loc[player, ['points', 'games_played']] = [points[player], tot_games]
-
-    rank.index.rename('player')
     rank = rank.reset_index()
-    rank.sort_values(['points', 'games_played'])
+    rank = rank.rename(columns={'index': 'player'})
+    rank = rank.sort_values(['points', 'games_played'], ascending=False)
+
+    rank.insert(0, 'position', range(1, len(rank) + 1))
 
     return rank
