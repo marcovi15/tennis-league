@@ -56,16 +56,23 @@ def read_latest_results():
     return df
 
 
+def read_register(file_name):
+
+    try:
+        df = pd.read_csv(os.path.join(BASEDIR, 'data', file_name))
+    except pd.errors.EmptyDataError:
+        df = pd.DataFrame()
+
+    return df
+
+
 def read_all_results():
     """
     Reads archive of results
     :return:
     """
 
-    try:
-        df = pd.read_csv(os.path.join(BASEDIR, 'data', 'results_archive.csv'))
-    except pd.errors.EmptyDataError:
-        df = pd.DataFrame()
+    df = read_register('results_archive.csv')
 
     return df
 
@@ -99,6 +106,19 @@ def read_ranking():
 
     if df.empty:
         df = pd.DataFrame(columns=['player', 'points', 'games_played'])
+
+    return df
+
+
+def read_points_reg():
+    """
+    Reads archive of results
+    :return:
+    """
+
+    df = read_register('points_reg.csv')
+
+    df = df.set_index('week', drop=True)
 
     return df
 

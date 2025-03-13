@@ -20,9 +20,13 @@ all_results, current_week = update_results(old_results, latest_results)
 
 # Calculate points
 ranking = read_ranking()
+points_register = read_points_reg()
 new_points = assign_points(latest_results, ranking)
+all_points = update_points_register(new_points, points_register, current_week)
 
 # Update & publish rankings
-
+# TODO: test this, especially if long ranks
+new_ranks = calculate_rankings(all_points, ranking)
+print(new_ranks)
 
 # Generate sign up sheet (with all players in db)
