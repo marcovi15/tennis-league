@@ -87,4 +87,6 @@ def calculate_rankings(points):
 
     rank.insert(0, 'position', range(1, len(rank) + 1))
 
+    rank = rank.reset_index()
+
     return rank

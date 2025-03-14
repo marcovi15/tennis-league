@@ -40,3 +40,25 @@ def pick_next_matchups(match_count, pool):
             break  # Stop if we have an odd player left out
 
     return next_matchups, available_players
+
+
+def create_matchup_table(matchups):
+
+    df = pd.DataFrame(
+        columns=['player 1', 'player 2', 'score 1', 'score 2']
+    )
+    df.loc[len(df), ['player 1', 'player 2', 'score 1', 'score 2']] = \
+        [matchups[len(df)][0], matchups[len(df)][1], None, None]
+
+    return df
+
+
+def generate_sign_up_table(points):
+
+    signup_df = pd.DataFrame()
+    signup_df['player'] = points.columns
+    signup_df['playing'] = None
+
+    signup_df = signup_df.sort_values('player')
+
+    return signup_df

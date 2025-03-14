@@ -2,30 +2,41 @@ import gspread
 import os
 import pandas as pd
 from google.oauth2.service_account import Credentials
+from gspread_dataframe import set_with_dataframe
 
 
 BASEDIR = os.path.join(os.path.dirname(__file__), '..')
+FILE_NAME = "tennis_league"
 
-def read_sheet(file_name, sheet_name):
+
+def connect_to_sheet():
+
     creds = Credentials.from_service_account_file(os.path.join(BASEDIR, 'data', 'tennis-league-key.json'), scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"])
     client = gspread.authorize(creds)
 
-    worksheet = client.open(file_name).worksheet(sheet_name)
+    return client
+
+
+def read_sheet(sheet_name):
+
+    client = connect_to_sheet()
+
+    worksheet = client.open(FILE_NAME).worksheet(sheet_name)
 
     data = worksheet.get_all_records()
     df = pd.DataFrame(data)
 
     return df
 
+
 def read_sign_up():
     """
     Reads who signed up for the event.
     """
 
-    file_name = "sign_up_form"
     sheet_name = "sign_up"
 
-    df = read_sheet(file_name, sheet_name)
+    df = read_sheet(sheet_name)
 
     return df
 
@@ -36,8 +47,8 @@ def get_players_pool(df):
     :param df:
     :return:
     """
-    signed_up_mask = df['Playing'].str.match(r'^y', case=False, na=False)
-    players_pool = df.loc[signed_up_mask, "Player"].to_list()
+    signed_up_mask = df['playing'].str.match(r'^y', case=False, na=False)
+    players_pool = df.loc[signed_up_mask, "player"].to_list()
 
     return players_pool
 
@@ -48,10 +59,9 @@ def read_latest_results():
     :return:
     """
 
-    file_name = "sign_up_form"
-    sheet_name = "results"
+    sheet_name = "match_ups"
 
-    df = read_sheet(file_name, sheet_name)
+    df = read_sheet(sheet_name)
 
     return df
 
@@ -99,10 +109,9 @@ def update_results(old_results, new_results):
 
 def read_ranking():
 
-    file_name = "sign_up_form"
     sheet_name = "ranking"
 
-    df = read_sheet(file_name, sheet_name)
+    df = read_sheet(sheet_name)
 
     if df.empty:
         df = pd.DataFrame(columns=['player', 'points', 'games_played'])
@@ -122,3 +131,17 @@ def read_points_reg():
 
     return df
 
+
+def publish_data(df, sheet):
+
+    client = connect_to_sheet()
+    worksheet = client.open(FILE_NAME).worksheet(sheet)
+    worksheet.clear()
+    set_with_dataframe(worksheet, df)
+
+
+def publish_all_tables(publishing_map):
+
+    for sheet, df in publishing_map.items():
+        df = df.astype(str)
+        publish_data(df, sheet)
