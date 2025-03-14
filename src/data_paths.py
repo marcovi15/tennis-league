@@ -37,6 +37,8 @@ def read_sign_up():
     sheet_name = "sign_up"
 
     df = read_sheet(sheet_name)
+    if df.empty:
+        df = pd.DataFrame(columns=['player', 'playing'])
 
     return df
 
@@ -63,15 +65,16 @@ def read_latest_results():
 
     df = read_sheet(sheet_name)
 
+    if df.empty:
+        df = pd.DataFrame(columns=['player 1', 'player 2', 'score 1', 'score 2'])
+
     return df
 
 
-def read_register(file_name):
+def read_register():
 
-    try:
-        df = pd.read_csv(os.path.join(BASEDIR, 'data', file_name))
-    except pd.errors.EmptyDataError:
-        df = pd.DataFrame()
+    sheet_name = "points"
+    df = read_sheet(sheet_name)
 
     return df
 
@@ -82,7 +85,8 @@ def read_all_results():
     :return:
     """
 
-    df = read_register('results_archive.csv')
+    sheet_name = "past_results"
+    df = read_sheet(sheet_name)
 
     return df
 
@@ -104,6 +108,8 @@ def update_results(old_results, new_results):
         new_results['week'] = current_week
         df = pd.concat([old_results, new_results])
 
+    df = df.reset_index(drop=True)
+
     return df, current_week
 
 
@@ -115,19 +121,6 @@ def read_ranking():
 
     if df.empty:
         df = pd.DataFrame(columns=['player', 'points', 'games_played'])
-
-    return df
-
-
-def read_points_reg():
-    """
-    Reads archive of results
-    :return:
-    """
-
-    df = read_register('points_reg.csv')
-
-    df = df.set_index('week', drop=True)
 
     return df
 

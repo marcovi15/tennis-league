@@ -20,20 +20,20 @@ if len(players_pool) <= 1:
 latest_results = read_latest_results()
 old_results = read_all_results()
 all_results, current_week = update_results(old_results, latest_results)
+ranking = read_ranking()
 
 # Calculate & publish match-ups (every Saturday)
 if skip_flag:
-    matchup_table = pd.DataFrame(columns=latest_results.columns[:-1])
+    matchup_table = pd.DataFrame(columns=[latest_results.columns[:-1]])
 else:
     match_count = get_archive_of_matchups(all_results, players_pool)
-    next_pairs, odd_player = pick_next_matchups(match_count, players_pool)
+    next_pairs, odd_player = pick_next_matchups(match_count, players_pool, ranking)
     if len(odd_player) > 0:
-        print(f'Player resting this week: {list(odd_player)[0]}.')
+        print(f'Player resting this week: {odd_player}.')
     matchup_table = create_matchup_table(next_pairs)
 
 # Calculate points
-ranking = read_ranking()
-points_register = read_points_reg()
+points_register = read_register()
 new_points = assign_points(latest_results, ranking) # TODO: Fix bug that crashes if player plays twice in a week
 all_points = update_points_register(new_points, points_register, current_week)
 
@@ -41,7 +41,7 @@ all_points = update_points_register(new_points, points_register, current_week)
 new_ranks = calculate_rankings(all_points)
 
 # Generate sign up table
-sign_up_table = generate_sign_up_table(all_points)
+sign_up_table = generate_sign_up_table(new_ranks)
 
 # Publish everything
 publishing_map = {
