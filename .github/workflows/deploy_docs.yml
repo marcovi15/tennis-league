@@ -29,5 +29,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/html
+          personal_token: ${{ secrets.GH_PAT }}
+          publish_dir: build/html  # ✅ This must match your Sphinx build output directory
+          external_repository: marcovi15/tennis-league
+          publish_branch: gh-pages
