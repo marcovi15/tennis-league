@@ -3,6 +3,17 @@ import numpy as np
 import re
 
 
+def calculate_points(winner, loser, ranking):
+
+    if ranking.loc[ranking['player'] == winner, 'points'].values < ranking.loc[ranking['player'] == loser, 'points'].values:
+        win_points = np.round(100 + 0.2 * ranking.loc[ranking['player'] == loser, 'points'].values, 0)
+    else:
+        win_points = 100
+    los_points = 20
+
+    return win_points, los_points
+
+
 def assign_points(results, ranking):
 
     points_df = pd.DataFrame(
@@ -25,18 +36,15 @@ def assign_points(results, ranking):
             ranking.loc[len(ranking), ['player', 'points', 'games_played']] = [p2, min_points, 0]
 
         if results.loc[pair, 'score 1'] > results.loc[pair, 'score 2']:
-            if ranking.loc[ranking['player']==p1, 'points'].values < ranking.loc[ranking['player']==p2, 'points'].values:
-                points_df.loc[p1, 'points'] = 100 + 0.2 * ranking.loc[ranking['player']==p2, 'points'].values
-            else:
-                points_df.loc[p1, 'points'] = 100
-            points_df.loc[p2, 'points'] = 20
-
-        if results.loc[pair, 'score 1'] < results.loc[pair, 'score 2']:
-            if ranking.loc[ranking['player']==p1, 'points'].values > ranking.loc[ranking['player']==p2, 'points'].values:
-                points_df.loc[p2, 'points'] = 100 + 0.2 * ranking.loc[ranking['player']==p2, 'points'].values
-            else:
-                points_df.loc[p2, 'points'] = 100
-            points_df.loc[p1, 'points'] = 20
+            points_df.loc[p1, 'points'], points_df.loc[p2, 'points'] = calculate_points(p1, p2, ranking)
+        elif results.loc[pair, 'score 1'] < results.loc[pair, 'score 2']:
+            points_df.loc[p2, 'points'], points_df.loc[p1, 'points'] = calculate_points(p2, p1, ranking)
+        elif (not results.loc[pair, 'score 1']) & (not results.loc[pair, 'score 2']):
+            points_df.loc[p1, 'points'] = 40
+            points_df.loc[p2, 'points'] = 40
+            print(f'Match between {p1} & {p2} was a draw.')
+        else:
+            print(f'Match between {p1} & {p2} was not played.')
 
     return points_df
 
@@ -89,6 +97,6 @@ def calculate_rankings(points):
 
     rank.insert(0, 'position', range(1, len(rank) + 1))
 
-    rank = rank.reset_index()
+    rank = rank.reset_index(drop=True)
 
     return rank

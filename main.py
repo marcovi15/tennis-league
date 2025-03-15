@@ -43,7 +43,7 @@ new_ranks = calculate_rankings(all_points)
 # Generate sign up table
 sign_up_table = generate_sign_up_table(new_ranks)
 
-# Publish everything
+# Publish & backup everything
 publishing_map = {
     'sign_up': sign_up_table,
     'match_ups': matchup_table,
@@ -51,4 +51,5 @@ publishing_map = {
     'past_results': all_results,
     'points': all_points
 }
+backup_all_tables(publishing_map)
 publish_all_tables(publishing_map)

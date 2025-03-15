@@ -130,7 +130,15 @@ def publish_data(df, sheet):
     client = connect_to_sheet()
     worksheet = client.open(FILE_NAME).worksheet(sheet)
     worksheet.clear()
-    set_with_dataframe(worksheet, df)
+
+    df_no_index = df.reset_index(drop=True)
+    set_with_dataframe(worksheet, df_no_index)
+
+
+def backup_data(df, file):
+    file_path = os.path.join(BASEDIR, 'archive', file)
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    df.to_csv(file_path)
 
 
 def publish_all_tables(publishing_map):
@@ -138,3 +146,10 @@ def publish_all_tables(publishing_map):
     for sheet, df in publishing_map.items():
         df = df.astype(str)
         publish_data(df, sheet)
+
+
+def backup_all_tables(publishing_map):
+    for file, df in publishing_map.items():
+        file_name = file + '.csv'
+        df = df.astype(str)
+        backup_data(df, file_name)
