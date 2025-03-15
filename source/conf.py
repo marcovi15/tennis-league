@@ -17,7 +17,6 @@ extensions = [
     'sphinx.ext.napoleon',         # Support Google- & NumPy-style docstrings
     'sphinx.ext.viewcode',         # Add links to source code
     'sphinx.ext.autosummary',      # Generate summary tables
-    'sphinx_autodoc_typehints',     # Show type hints in docs
     'sphinxemoji.sphinxemoji'
 ]
 

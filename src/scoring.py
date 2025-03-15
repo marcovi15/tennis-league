@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import re
 
 
 def calculate_points(winner, loser, ranking):
