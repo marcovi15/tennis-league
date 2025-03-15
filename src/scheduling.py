@@ -70,10 +70,11 @@ def create_matchup_table(matchups):
     return df
 
 
-def generate_sign_up_table(ranks):
+def generate_sign_up_table(ranks, pool):
 
+    all_players = list(set(list(ranks['player']) + list(pool)))
     signup_df = pd.DataFrame()
-    signup_df['player'] = ranks['player']
+    signup_df['player'] = all_players
     signup_df['playing'] = ''
 
     signup_df = signup_df.sort_values('player')

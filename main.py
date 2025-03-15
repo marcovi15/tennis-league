@@ -41,7 +41,7 @@ all_points = update_points_register(new_points, points_register, current_week)
 new_ranks = calculate_rankings(all_points)
 
 # Generate sign up table
-sign_up_table = generate_sign_up_table(new_ranks)
+sign_up_table = generate_sign_up_table(new_ranks, players_pool)
 
 # Publish & backup everything
 publishing_map = {

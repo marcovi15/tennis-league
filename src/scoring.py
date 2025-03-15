@@ -35,11 +35,13 @@ def assign_points(results, ranking):
         if (ranking['player'] == p2).sum() == 0:
             ranking.loc[len(ranking), ['player', 'points', 'games_played']] = [p2, min_points, 0]
 
-        if results.loc[pair, 'score 1'] > results.loc[pair, 'score 2']:
+        sets_p1 = results.loc[pair, 'score 1']
+        sets_p2 = results.loc[pair, 'score 2']
+        if sets_p1 > sets_p2:
             points_df.loc[p1, 'points'], points_df.loc[p2, 'points'] = calculate_points(p1, p2, ranking)
-        elif results.loc[pair, 'score 1'] < results.loc[pair, 'score 2']:
+        elif sets_p1 < sets_p2:
             points_df.loc[p2, 'points'], points_df.loc[p1, 'points'] = calculate_points(p2, p1, ranking)
-        elif (not results.loc[pair, 'score 1']) & (not results.loc[pair, 'score 2']):
+        elif bool(sets_p1) & bool(sets_p2):
             points_df.loc[p1, 'points'] = 40
             points_df.loc[p2, 'points'] = 40
             print(f'Match between {p1} & {p2} was a draw.')
