@@ -9,7 +9,7 @@ def calculate_points(winner, loser, ranking):
         win_points = np.round(100 + 0.2 * ranking.loc[ranking['player'] == loser, 'points'].values, 0)
     else:
         win_points = 100
-    los_points = 20
+    los_points = 30
 
     return win_points, los_points
 
@@ -42,8 +42,8 @@ def assign_points(results, ranking):
         elif sets_p1 < sets_p2:
             points_df.loc[p2, 'points'], points_df.loc[p1, 'points'] = calculate_points(p2, p1, ranking)
         elif bool(sets_p1) & bool(sets_p2):
-            points_df.loc[p1, 'points'] = 40
-            points_df.loc[p2, 'points'] = 40
+            points_df.loc[p1, 'points'] = 50
+            points_df.loc[p2, 'points'] = 50
             print(f'Match between {p1} & {p2} was a draw.')
         else:
             print(f'Match between {p1} & {p2} was not played.')
