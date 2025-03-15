@@ -3,12 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Tennis League documentation
+Leamington Tennis League
 ===========================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+Welcome to the Leamington  Tennis League! |:tennis:|
+
+This guide should provide you with all the information you need to start playing, but if you have any doubts just ask Marco.
+
+If you don't want to read all the details, there's a **TL;DR** section in the :doc:`overview` section.
+
+Feel free to suggest any improvements to the rules and/or the league structure!
+Finally, but most importantly, remember that this is all for fun and we're all mostly here to get better at tennis while meeting new people!
 
 
 .. toctree::
@@ -16,6 +21,7 @@ documentation for details.
    :caption: Contents:
 
    overview
+   sign_up
    games_rules
    points_system
 

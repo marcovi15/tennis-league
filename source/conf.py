@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Tennis League'
+project = 'Leamington Tennis League'
 copyright = '2025, Marco Virgili'
 author = 'Marco Virgili'
 release = '1.0'
@@ -17,13 +17,12 @@ extensions = [
     'sphinx.ext.napoleon',         # Support Google- & NumPy-style docstrings
     'sphinx.ext.viewcode',         # Add links to source code
     'sphinx.ext.autosummary',      # Generate summary tables
-    'sphinx_autodoc_typehints'     # Show type hints in docs
+    'sphinx_autodoc_typehints',     # Show type hints in docs
+    'sphinxemoji.sphinxemoji'
 ]
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-
-extensions = []
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -35,4 +34,6 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_css_files = ['custom.css']
+
 
