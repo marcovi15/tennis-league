@@ -23,7 +23,7 @@ from src.scoring import *
         ),
         3,
         pd.DataFrame(
-            index=[1, 2, 3],
+            index=[0, 1, 2],
             data=
             {
                 'A': [20, 20, 20],
@@ -58,7 +58,7 @@ def test_update_points_register(new_df, old_df, week, expected_out):
             }
         ),
         pd.DataFrame(
-            index=[1, 0, 2],
+            index=[0, 1, 2],
             data=
             {
                 'position': [1, 2, 3],
