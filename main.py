@@ -23,6 +23,7 @@ all_results, current_week = update_results(old_results, latest_results)
 ranking = read_ranking()
 
 # Calculate & publish match-ups (every Saturday)
+# Check if enough players to play
 if skip_flag:
     matchup_table = pd.DataFrame(columns=[latest_results.columns[:-1]])
 else:
