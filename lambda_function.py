@@ -1,7 +1,6 @@
-import pandas as pd
-from src.data_paths import *
-from src.scheduling import *
-from src.scoring import *
+from data_paths import *
+from scheduling import *
+from scoring import *
 import logging
 
 logger = logging.getLogger()
@@ -9,13 +8,16 @@ logger.setLevel(logging.INFO)
 
 def main():
 
+    logger.info("Script execution started.")
+
+    logger.info("Reading input data...")
     # Read sign ups (every Saturday)
     signed_up = read_sign_up()
     players_pool = get_players_pool(signed_up)
 
     skip_flag = False
     if len(players_pool) <= 1:
-        print('Skipping round as not enough players signed up.')
+        logger.info('Skipping round as not enough players signed up.')
         skip_flag = True
 
     # Read & save results (from previous week)
@@ -24,6 +26,7 @@ def main():
     all_results, current_week = update_results(old_results, latest_results)
     ranking = read_ranking()
 
+    logger.info("Carrying out calculations...")
     # Calculate & publish match-ups (every Saturday)
     # Check if enough players to play
     if skip_flag:
@@ -46,6 +49,7 @@ def main():
     # Generate sign up table
     sign_up_table = generate_sign_up_table(new_ranks, players_pool)
 
+    logger.info("Publishing results...")
     # Publish & backup everything
     publishing_map = {
         'sign_up': sign_up_table,
@@ -56,6 +60,12 @@ def main():
     }
     backup_all_tables(publishing_map)
     publish_all_tables(publishing_map)
+
+    logger.info("Script execution completed!")
+
+    result = "Script ran successfully."
+
+    return result
 
 
 def lambda_handler(event, context):

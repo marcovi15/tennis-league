@@ -6,7 +6,7 @@ from google.oauth2.service_account import Credentials
 from gspread_dataframe import set_with_dataframe
 
 
-BASEDIR = os.path.join(os.path.dirname(__file__), '..')
+BASEDIR = os.path.join(os.path.dirname(__file__))
 FILE_NAME = "tennis_league"
 
 
@@ -15,7 +15,7 @@ def connect_to_sheet():
     Establishes connection to Google sheet
     """
 
-    creds = Credentials.from_service_account_file(os.path.join(BASEDIR, 'data', 'tennis-league-key.json'), scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"])
+    creds = Credentials.from_service_account_file(os.path.join(BASEDIR, 'tennis-league-key.json'), scopes=["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"])
     client = gspread.authorize(creds)
 
     return client

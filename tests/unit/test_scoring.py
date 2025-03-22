@@ -1,6 +1,5 @@
 import pytest
-import pandas as pd
-from src.scoring import *
+from scoring import *
 
 
 @pytest.mark.parametrize(
